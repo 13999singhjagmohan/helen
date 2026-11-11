@@ -1,0 +1,33 @@
+# Runs Helen and a self-hosted model server together on one cloud GPU machine.
+# Usage: copy .env.example to .env, set LLM_MODEL, then: docker compose up -d
+services:
+  helen:
+    build: .
+    env_file: .env
+    environment:
+      LLM_PROVIDER: openai-compatible
+      LLM_BASE_URL: http://model:11434/v1
+    ports:
+      - "3000:3000"
+    volumes:
+      - helen-data:/app/data
+    depends_on:
+      - model
+    restart: unless-stopped
+
+  model:
+    image: ollama/ollama
+    volumes:
+      - model-data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+volumes:
+  helen-data:
+  model-data:

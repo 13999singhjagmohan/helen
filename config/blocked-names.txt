@@ -1,0 +1,4 @@
+# One name per line. Characters whose name matches an entry are rejected.
+# Add public figures, celebrities, or anyone you know personally.
+taylor swift
+scarlett johansson

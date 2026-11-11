@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Helen</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <section id="gate" class="card hidden">
+    <div class="brand">Helen</div>
+    <h1>Adults only</h1>
+    <p>This app contains mature themes and is strictly for people aged 18 or older.</p>
+    <label>Date of birth <input type="date" id="dob"></label>
+    <label class="row"><input type="checkbox" id="attest"> I confirm I am 18 or older and legally allowed to view adult content where I live.</label>
+    <button id="verifyBtn">Enter</button>
+    <p class="error" id="gateErr"></p>
+  </section>
+
+  <main id="app" class="hidden">
+    <aside>
+      <div class="brand">Helen</div>
+      <h2>Companions</h2>
+      <ul id="charList"></ul>
+      <div class="btnrow">
+        <button id="galleryBtn">Browse</button>
+        <button id="newCharBtn" class="ghost">Create</button>
+        <button id="importBtn" class="ghost">Import</button>
+      </div>
+
+      <details open><summary>Your boundaries</summary>
+        <label>Content level <select id="contentLevel"></select></label>
+        <p class="hint" id="providerNote"></p>
+        <label>Hard limits (comma separated) <input id="hardLimits" placeholder="e.g. degradation, pain"></label>
+        <label>Safe word <input id="safeWord"></label>
+        <button id="saveBounds">Save boundaries</button>
+        <p class="hint" id="pausedNote"></p>
+      </details>
+
+      <details><summary>Preferences</summary>
+        <label>Reply language
+          <select id="language">
+            <option>English</option><option>Deutsch</option><option>Français</option><option>Español</option>
+            <option>Italiano</option><option>Português</option><option>Nederlands</option><option>Polski</option>
+            <option>Türkçe</option><option>हिन्दी</option><option>ਪੰਜਾਬੀ</option><option>日本語</option><option>한국어</option><option>中文</option>
+          </select>
+        </label>
+        <label class="row"><input type="checkbox" id="voice"> Read replies aloud</label>
+        <label>My quick replies (one per line)<textarea id="customChips" rows="4" placeholder="Your own lines to send with one tap"></textarea></label>
+        <button id="saveChips" class="ghost">Save quick replies</button>
+      </details>
+
+      <details><summary>Privacy</summary>
+        <p class="hint">Your data stays on this server. You can download or erase it at any time.</p>
+        <div class="btnrow"><a href="/api/export" class="btn ghost">Download my data</a><button id="wipeBtn" class="danger">Erase everything</button></div>
+      </details>
+    </aside>
+
+    <section id="chat">
+      <header>
+        <img id="chatAvatar" class="avatar hidden" alt="">
+        <div><strong id="chatName">Pick or create a companion</strong>
+          <div class="hint"><span id="stage"></span> <span id="mood"></span></div></div>
+        <button id="photoBtn" class="ghost hidden" title="Change their photo">Photo</button>
+        <input type="file" id="avatarFile" accept="image/*" hidden>
+        <button id="selfieBtn" class="ghost hidden" title="Ask for a photo">Ask for a pic</button>
+        <button id="memoryBtn" class="ghost hidden" title="What they remember">Memories</button>
+        <button id="stopBtn" class="stop" title="Stop immediately">Stop</button>
+      </header>
+      <div id="messages"></div>
+      <div id="typing" class="hidden"><span></span><span></span><span></span></div>
+      <div id="chips"></div>
+      <form id="sendForm">
+        <button type="button" id="regenBtn" class="ghost" title="New reply">↻</button>
+        <input id="msg" autocomplete="off" placeholder="Say something...">
+        <button type="button" id="suggestBtn" class="ghost" title="Suggest replies">✨</button>
+        <button type="button" id="micBtn" class="ghost" title="Speak">🎤</button>
+        <button>Send</button>
+      </form>
+    </section>
+  </main>
+
+  <dialog id="galleryDialog">
+    <h2>Meet someone</h2>
+    <div id="gallery"></div>
+    <menu><button class="ghost" onclick="this.closest('dialog').close()">Close</button></menu>
+  </dialog>
+
+  <dialog id="charDialog">
+    <form id="charForm" method="dialog">
+      <h2>Create a companion</h2>
+      <div class="grid2">
+        <label>Name <input name="name" required maxlength="40"></label>
+        <label>Age (18+) <input name="age" type="number" min="18" max="120" value="27" required></label>
+        <label>Gender <input name="gender" placeholder="woman, man, non-binary, ..."></label>
+        <label>Orientation <input name="orientation" placeholder="straight, gay, bi, pan, ..."></label>
+      </div>
+      <label>Personality <textarea name="personality" placeholder="witty, caring, a little shy at first"></textarea></label>
+      <label>Speaking style <input name="speakingStyle" placeholder="casual, uses humour, short messages"></label>
+      <label>Photo (optional) <input type="file" id="newAvatar" accept="image/*"></label>
+      <label>Appearance <textarea name="appearance"></textarea></label>
+      <label>Backstory <textarea name="backstory"></textarea></label>
+      <label>Scenario (optional) <textarea name="scenario" placeholder="Where and how you two meet"></textarea></label>
+      <label>First message (optional) <textarea name="greeting"></textarea></label>
+      <label class="row"><input type="checkbox" name="fictionalAttested"> This character is fictional, an adult, and not based on a real person.</label>
+      <p class="error" id="charErr"></p>
+      <menu><button value="cancel" class="ghost" formnovalidate>Cancel</button><button id="createChar" value="ok">Create</button></menu>
+    </form>
+  </dialog>
+
+  <dialog id="importDialog">
+    <h2>Import a character card</h2>
+    <p class="hint">Supports TavernAI / SillyTavern cards (.json or .png). Cards carry no age, so set one.</p>
+    <label>Card file <input type="file" id="cardFile" accept=".json,.png"></label>
+    <label>Age (18+) <input type="number" id="importAge" min="18" max="120" value="25"></label>
+    <label class="row"><input type="checkbox" id="importAttest"> This character is fictional, an adult, and not based on a real person.</label>
+    <p class="error" id="importErr"></p>
+    <menu><button class="ghost" onclick="this.closest('dialog').close()">Cancel</button><button id="doImport">Import</button></menu>
+  </dialog>
+
+  <dialog id="memoryDialog">
+    <h2>What <span id="memName"></span> remembers</h2>
+    <p class="hint">One memory per line. Edit, add or delete anything.</p>
+    <textarea id="memText" rows="12"></textarea>
+    <menu><button class="ghost" id="forgetAll">Reset conversation</button><button class="ghost" onclick="this.closest('dialog').close()">Cancel</button><button id="saveMem">Save</button></menu>
+  </dialog>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>

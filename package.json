@@ -1,0 +1,16 @@
+{
+  "name": "companion-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Adults-only conversational companion with memory, mood and configurable content boundaries.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test",
+    "check-model": "node scripts/check-model.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
