@@ -47,7 +47,7 @@ Adapters live in `src/adapters/`. Each exports `{ name, allowsExplicit, chat({ m
 
 Many hosted providers prohibit sexually explicit generation in their usage policies. Check your provider's terms before setting `PROVIDER_ALLOWS_EXPLICIT=true`. While it is `false`, the "explicit" level is capped at "sensual".
 
-See [CLOUD_SETUP.md](CLOUD_SETUP.md) to run Helen and a model in the cloud.
+See [FREE_SETUP.md](FREE_SETUP.md) to run Helen for free, or [CLOUD_SETUP.md](CLOUD_SETUP.md) for paid cloud hosting.
 
 ## Data
 

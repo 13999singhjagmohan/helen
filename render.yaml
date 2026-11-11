@@ -1,15 +1,12 @@
-# Blueprint for one-click deploy on Render. Check Render's acceptable use policy for adult content first.
+# Blueprint for one-click deploy on Render's free plan (sleeps when idle; saved chats reset on restart).
+# Check Render's acceptable use policy for adult content first.
 services:
   - type: web
     name: helen
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: "true"
     startCommand: node src/server.js
-    disk:
-      name: helen-data
-      mountPath: /opt/render/project/src/data
-      sizeGB: 1
     envVars:
       - key: APP_NAME
         value: Helen
