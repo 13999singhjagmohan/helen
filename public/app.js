@@ -217,14 +217,25 @@ $('selfieBtn').onclick = async () => {
 // Gallery of starter companions.
 async function openGallery() {
   const { data } = await api('/api/templates');
-  $('gallery').innerHTML = '';
-  for (const t of data) {
-    const div = document.createElement('div');
-    div.className = 'tile';
-    div.innerHTML = `<h3>${esc(t.name)}, ${t.age}</h3><div class="hint">${esc(t.gender)} · ${esc(t.orientation)}</div><p>${esc(t.backstory)}</p>`;
-    div.onclick = () => { $('galleryDialog').close(); openCreate(t); };
-    $('gallery').append(div);
+  const regions = ['All', ...new Set(data.map((t) => t.region))];
+  const show = (region) => {
+    $('regions').querySelectorAll('button').forEach((b) => b.classList.toggle('ghost', b.textContent !== region));
+    $('gallery').innerHTML = '';
+    for (const t of data.filter((x) => region === 'All' || x.region === region)) {
+      const div = document.createElement('div');
+      div.className = 'tile';
+      div.innerHTML = `<h3>${esc(t.name)}, ${t.age}</h3><div class="hint">${esc(t.country)} · ${esc(t.gender)} · ${esc(t.orientation)}</div><p>${esc(t.backstory)}</p>`;
+      div.onclick = () => { $('galleryDialog').close(); openCreate(t); };
+      $('gallery').append(div);
+    }
+  };
+  $('regions').innerHTML = '';
+  for (const r of regions) {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = r;
+    b.onclick = () => show(r);
+    $('regions').append(b);
   }
+  show('All');
   $('galleryDialog').showModal();
 }
 $('galleryBtn').onclick = openGallery;
